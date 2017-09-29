@@ -1,0 +1,175 @@
+from __future__ import division
+from collections import Counter
+from bs4 import BeautifulSoup
+import csv
+import requests
+import functools
+
+# LISTS USED FOR PROGRAM
+players = []
+stats1 =[]
+stats2 = []
+pOfXsWins = []
+pOfXsLosses = []
+probs_win = []
+probs_lose = []
+
+
+#GRAB THE INFORMATION FOR BOTH TEAMS
+def grabstats1():
+    
+    # PUT THE WEBSITE OF TEAM 1 THAT YOU ARE ANALYZING 
+    # Panthers
+    #html = requests.get("http://www.espn.com/nfl/team/stats/_/type/team/name/den/denver-broncos").text
+    # Packers
+    html = requests.get("http://www.espn.com/nfl/team/stats/_/type/team/name/gb/green-bay-packers").text
+    #html = requests.get("http://www.nfl.com/teams/statistics?team=gb").text
+    soup = BeautifulSoup(html, 'html5lib')
+
+    # GRAB ALL STAT INFO
+    for td_tag in soup.find_all('td'):
+        stat = td_tag.text
+        stats1.append(stat)
+
+def grabstats2():
+
+    # ENTER THE TEAM YOU WANT AS TEAM 2
+    html = requests.get("http://www.espn.com/nfl/team/stats/_/type/team/name/cin/cincinnati-bengals").text
+    #html = requests.get("http://www.espn.com/nfl/team/stats/_/type/team/name/buf/buffalo-bills").text
+    soup = BeautifulSoup(html, 'html5lib')
+
+    # GRAB ALL STAT INFO
+    for td_tag in soup.find_all('td'):
+        stat = td_tag.text
+        stats2.append(stat)
+
+# PROBABILITY OF WINNING/LOSSING FOR NOW IT IS 50/50
+# THIS MAY CHANGE TO PREVIOUS GAMES STATS TO OUTCOMES 
+def prob_of_t1_winning():
+    return 0.5
+def prob_of_t2_winning():
+    return 0.5
+
+# PLUG IN PROBABILITY OF X | Y
+def P_X(x, list):
+    a = Counter(list)
+    return (a[x] / len(list))
+def P_Y(y, list2):
+    a = Counter(list2)
+    return (a[y] / len(list2))
+def P_X_Y(x, y, list, list2):
+    # First must show independant attributes
+    #print("x y list list2", x, y, list, list2)
+    z = (P_X(x, list) * P_Y(y, list2) / P_Y(y, list2)) if P_Y(y, list2) != 0 else 0
+    return z
+def P_Y_X(y, x, list, list2):
+    return (P_X_Y(x, y, list, list2) * P_Y(y, list2))/ P_X(x, list)
+
+# STATS FOR EACH SIGNIFICANT ATTRIBUTE
+# NEED TO ADD MORE FROM STATS 
+def total_first_downs_t1():
+    return float(stats1[140])
+def total_first_downs_t2():
+    return float(stats2[140])
+def rushing_yards_t1():
+    return float(stats1[60])
+def rushing_yards_t2():
+    return float(stats2[60])
+def interceptions_t1():
+    return stats1[183]
+def interceptions_t2():
+    return stats2[183]
+
+# FIND P(X|Y) FOR THOSE ATTRIBUTES
+def p_of_t1_rushing_vs_opp():
+    return rushing_yards_t1() / (rushing_yards_t1() + float(stats2[71]))
+def p_of_t2_rushing_vs_opp():
+    return rushing_yards_t2() / (rushing_yards_t2() + float(stats1[71]))
+def find_p_first_down_t1():
+    return total_first_downs_t1() / total_first_downs_t2() + total_first_downs_t1()
+def prob_of_pass_completion_t1():
+    return float(stats1[18]) / float(stats1[17])
+def prob_of_pass_completion_t2():
+    return float(stats2[18]) / float(stats2[17])
+def prob_of_rating_t1():
+    return float(stats1[30]) / (float(stats1[30]) + float(stats2[30]))
+def prob_of_rating_t2():
+    return float(stats2[30]) / (float(stats2[30]) + float(stats1[30]))
+
+def prob_of_td_t1():
+    return float(stats1[24]) / (float(stats1[24]) + float(stats2[24]))
+def prob_of_td_t2():
+    return float(stats2[24]) / (float(stats1[24]) + float(stats2[24]))
+def prob_of_passing_yards_t1():
+    return float(stats1[20]) / (float(stats1[20]) + float(stats1[60]) + float(stats1[97]))
+def prob_of_passing_yards_t2():
+    return float(stats2[20]) / (float(stats2[20]) + float(stats2[60]) + float(stats2[97]))
+def prob_of_rushing_yards_t1():
+    return float(stats1[60]) / (float(stats1[20]) + float(stats1[60]) + float(stats1[97]))
+def prob_of_rushing_yards_t2():
+    return float(stats2[60]) / (float(stats2[20]) + float(stats2[60]) + float(stats2[97]))
+def prob_of_first_down_t1():
+    return float(stats1[140]) / (float(stats1[17]) + float(stats1[59]) + float(stats1[95]))
+def prob_of_first_down_t2():
+    return float(stats2[140]) / (float(stats2[17]) + float(stats2[59]) + float(stats2[95]))
+
+# NEED TO CREATE THE LIST OF PROBABILITIES X OCCURS
+def build_up_p_x_given_win_list():
+    # NEED TO FILL IN THE PROBABILITY OF X OCCURING GIVEN A WIN
+    z = prob_of_t1_winning()
+    pOfXsWins.append((p_of_t1_rushing_vs_opp() * z) / z)
+    pOfXsWins.append((prob_of_pass_completion_t1() * z) / z)
+    pOfXsWins.append((prob_of_rating_t1() * z) / z)
+    pOfXsWins.append((prob_of_passing_yards_t1() * z) / z)
+    pOfXsWins.append((prob_of_first_down_t1() * z )/ z)
+    return
+def build_up_p_x_given_loss_list():
+    #  # NEED TO FILL IN THE PROBABILITY OF X OCCURING GIVEN A LOSS
+    z = prob_of_t2_winning()
+    pOfXsLosses.append((p_of_t2_rushing_vs_opp() * z) / z)
+    pOfXsLosses.append((prob_of_pass_completion_t2() * z) / z)
+    pOfXsLosses.append((prob_of_rating_t2() * z) / z)
+    pOfXsLosses.append((prob_of_passing_yards_t2() * z) / z)
+    pOfXsLosses.append((prob_of_first_down_t2() * z) / z)
+    return
+
+# FOR EACH X ATTRIBUTE NEED TO FIND X | Y
+def training():
+    t1_win = prob_of_t1_winning()
+    t1_lose = prob_of_t2_winning()
+    for i in pOfXsWins:
+        probs_win.append(i * t1_win)
+    for i in pOfXsLosses:
+        probs_lose.append(i * t1_lose)
+
+# BASED OFF OF TRAINING WHAT SHOULD HAPPEN 
+def classify():
+    answer = []
+    prob_of_win = functools.reduce(lambda x, y: x * y, probs_win) * prob_of_t1_winning()
+    prob_of_loss = functools.reduce(lambda x, y: x * y, probs_lose) * prob_of_t2_winning()
+    answer.append(prob_of_win)
+    answer.append(prob_of_loss)
+    max_value = max(answer)
+    max_index = answer.index(max_value)
+    if max_index == 0:
+        print("TEAM 1 is going to win!")
+    if max_index == 1:
+        print("TEAM 2 is going to win!")
+
+
+if __name__ == "__main__":
+    grabstats1()
+    print(stats1)
+    grabstats2()
+    #print(stats2[24])
+    #print(find_p_first_down_vs_opponent())
+    #print(total_first_downs_t1())
+    #print(total_first_downs_t2())
+    build_up_p_x_given_win_list()
+    build_up_p_x_given_loss_list()
+    #print(pOfXsWins)
+    #print(pOfXsLosses)
+    #print(stats1[18])
+    training()
+    classify()
+    #print(stats1[20], stats1[60], stats1[97])
