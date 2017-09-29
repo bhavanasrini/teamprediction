@@ -1,0 +1,20 @@
+from bs4 import BeautifulSoup
+import requests
+
+stats =[]
+
+def grabstats():
+    # PICK THE WEBSITE
+    html = requests.get("http://mcubed.net/nfl/den/dal.shtml").text
+    soup = BeautifulSoup(html, 'html5lib')
+    print(soup)
+    # GRAB ALL STAT INFO
+    for td_tag in soup.find_all('span'):
+        stat = td_tag.text
+        stats.append(stat)
+
+
+if __name__ == "__main__":
+    grabstats()
+    stats = [x.replace('\t', '').replace('\n', '') for x in stats]
+    print(stats)
