@@ -1,0 +1,443 @@
+from __future__ import division
+from bs4 import BeautifulSoup
+import requests
+from collections import Counter
+import functools
+import csv
+import master
+
+# LISTS FOR PROGRAM
+players = []
+totalmax = []
+maxnumber = []
+maxTeam = []
+stats = []
+pOfXsWins = []
+pOfXsLosses = []
+probs_win = []
+probs_lose = []
+
+outcome = []
+prob_t1_win = []
+prob_t2_win = []
+
+# Attribute lists
+q1 = []
+q2 = []
+q3 = []
+q4 = []
+
+
+firstdowns = []
+passing1stdowns = []
+rushing1stdowns = []
+totalyards = []
+yardsperplay = []
+passingyards = []
+yardsperpass = []
+rushingyards = []
+yardsperrush = []
+possession = []
+turnovers = []
+
+probabilities = []
+winner_is = []
+points = []
+
+
+# GRAB STATS FOR TEAM ONE AND TEAM TWO
+def grabstats(game):
+    html = requests.get(game).text
+    soup = BeautifulSoup(html, 'html5lib')
+
+    # GRAB ALL STAT INFO
+    for td_tag in soup.find_all('td'):
+        stat = td_tag.text
+        stats.append(stat)
+
+
+# NAME OF EACH TEAM
+def team1():
+    return stats[0]
+
+
+def team2():
+    return stats[6]
+
+
+# RETURNS WINNING TEAM FOR THAT GAME
+def winning_team():
+    if float(stats[5]) > float(stats[11]):
+        return 1
+    else:
+        return 2
+
+def gather_points():
+    points.append(float(stats[1]))
+    points.append(float(stats[2]))
+    points.append(float(stats[3]))
+    points.append(float(stats[4]))
+    points.append(float(stats[5]))
+    points.append(float(stats[7]))
+    points.append(float(stats[8]))
+    points.append(float(stats[9]))
+    points.append(float(stats[10]))
+# POINTS SCORED IN EACH QUARTER
+
+
+# LIST OF ATTRIBUTES
+
+# WHO SCORED MORE POINTS IN THE FIRST QUARTER
+def attr1():
+    # Grabs first quarter points
+    if float(stats[1]) > float(stats[7]):
+        q1.append(1)
+    else:
+        q1.append(0)
+
+
+# WHO SCORED MORE POINTS IN THE SECOND QUARTER
+def attr2():
+    # Grabs second quarter points
+    if float(stats[2]) > float(stats[8]):
+        q2.append(1)
+    else:
+        q2.append(0)
+        # print(q2)
+
+
+# WHO SCORED MORE POINTS IN THE THIRD QUARTER
+def attr3():
+    # Grabs third quarter points
+    if float(stats[3]) > float(stats[9]):
+        q3.append(1)
+    else:
+        q3.append(0)
+# WHO SCORED MORE POINTS IN THE FOURTH QUARTER
+def attr4():
+    if float(stats[4]) > float(stats[10]):
+        q4.append(1)
+    else:
+        q4.append(0)
+def attr5():
+    # Grabs first downs
+    if float(stats[13]) > float(stats[14]):
+        firstdowns.append(1)
+    else:
+        firstdowns.append(0)
+def attr6():
+    # Grabs passing first downs
+    if float(stats[16]) > float(stats[17]):
+        passing1stdowns.append(1)
+    else:
+        passing1stdowns.append(0)
+def attr7():
+    # Grabs rushing first downs
+    if float(stats[19]) > float(stats[20]):
+        rushing1stdowns.append(1)
+    else:
+        rushing1stdowns.append(0)
+def attr8():
+    # Grabs total yards
+    if float(stats[34]) > float(stats[35]):
+        totalyards.append(1)
+    else:
+        totalyards.append(0)
+def attr9():
+    # Grabs yards per play
+    if float(stats[40]) > float(stats[41]):
+        yardsperplay.append(1)
+    else:
+        yardsperplay.append(0)
+def attr10():
+    # Grabs passing yards
+    if float(stats[43]) > float(stats[44]):
+        passingyards.append(1)
+    else:
+        passingyards.append(0)
+def attr11():
+    #grabs yards per pass
+    if float(stats[49]) > float(stats[50]):
+        yardsperpass.append(1)
+    else:
+        yardsperpass.append(0)
+def attr12():
+    # Grabs rushing yards
+    if float(stats[58]) > float(stats[59]):
+        rushingyards.append(1)
+    else:
+        rushingyards.append(0)
+def attr13():
+    # Grabs yards per rush
+    if float(stats[64]) > float(stats[65]):
+        yardsperrush.append(1)
+    else:
+        yardsperrush.append(0)
+def attr14():
+    # Grabs turnovers
+    if float(stats[73]) > float(stats[74]):
+        turnovers.append(1)
+    if float(stats[73]) <= float(stats[74]):
+        turnovers.append(0)
+def attr15():
+    # Grabs possession minutes
+    x = stats[85].split(":")
+    y = stats[86].split(":")
+    if float(x[0]) > float(y[0]):
+        possession.append(1)
+    else:
+        possession.append(0)
+def run_attrs():
+    # CALLS ALL ATTRIBUTES TO ADD TO THE LIST
+    attr1()
+    attr2()
+    attr3()
+    attr4()
+    attr5()
+    attr6()
+    attr7()
+    attr8()
+    attr9()
+    attr10()
+    attr11()
+    attr12()
+    attr13()
+    attr14()
+    attr15()
+    if winning_team() == 1:
+        outcome.append(1)
+    else:
+        outcome.append(0)
+    return
+
+# CHANGE TO ACTUAL PROBABILITIES
+def prob_of_win():
+    return 0.5
+def prob_of_lose():
+    return 0.5
+
+# PROBAILITIES OF ATTRIBUTES (P(X))
+def run_probabilites():
+    probabilities.append(p_x(1, q1))
+    probabilities.append(p_x(0, q1))
+    probabilities.append(p_x(1, q2))
+    probabilities.append(p_x(0, q2))
+    probabilities.append(p_x(1, q3))
+    probabilities.append(p_x(0, q3))
+    probabilities.append(p_x(1, q4))
+    probabilities.append(p_x(0, q4))
+    probabilities.append(p_x(1, firstdowns))
+    probabilities.append(p_x(0, firstdowns))
+    probabilities.append(p_x(1, passing1stdowns))
+    probabilities.append(p_x(0, passing1stdowns))
+    probabilities.append(p_x(1, rushing1stdowns))
+    probabilities.append(p_x(0, rushing1stdowns))
+    probabilities.append(p_x(1, totalyards))
+    probabilities.append(p_x(0, totalyards))
+    probabilities.append(p_x(1, yardsperplay))
+    probabilities.append(p_x(0, yardsperplay))
+    probabilities.append(p_x(1, passingyards))
+    probabilities.append(p_x(0, passingyards))
+    probabilities.append(p_x(1, yardsperpass))
+    probabilities.append(p_x(0, yardsperpass))
+    probabilities.append(p_x(1, rushingyards))
+    probabilities.append(p_x(0, rushingyards))
+    probabilities.append(p_x(1, yardsperrush))
+    probabilities.append(p_x(0, yardsperrush))
+    probabilities.append(p_x(1, turnovers))
+    probabilities.append(p_x(0, turnovers))
+    probabilities.append(p_x(1, possession))
+    probabilities.append(p_x(0, possession))
+
+def p_x(x, list):
+    a = Counter(list)
+    return (a[x] / len(list))
+
+def p_x_y(x):
+    # ASSUMING INDEPENDENT VARIABLES
+    return p_x(x, list) * 0.5  # switch to p_y(y, list2), but for now = 0.5
+
+def write_CSV():
+    with open("data2.csv", "w") as e:
+        wr = csv.writer(e)
+        # F = FIRST DOWN PROB
+        # A = passing_first_down_prob
+        # T = TURNOVER PROB
+        # P = PASSING PROB
+        # O = OUTCOME
+        # wr.writerow("FATPO")
+        for i in zip(probabilities[0:1], probabilities[2:3], probabilities[4:5], probabilities[6:7], outcome):
+            wr.writerow(i)
+        del probabilities[:]
+
+def append_CSV():
+    with open("data2.csv", "a") as f:
+        wr = csv.writer(f)
+        # The last row is for the neural_network (it shows likelihood of price going up or staying the same)
+        for i in zip(probabilities[0:1], probabilities[2:3], probabilities[4:5], probabilities[6:7], outcome[-1:]):
+            wr.writerow(i)
+        del probabilities[:]
+
+# THESE ARE ALL BASED OFF OF THE ASSUMPTION OF INDEPENDENT VARIABLES
+# IF WE WANT TO CHANGE THAT WE NEED TO TWEEK THE EQUATION
+
+def build_up_p_x_given_win_list():
+    # NEED TO FILL IN THE PROBABILITY OF X OCCURING GIVEN A WIN
+    z = prob_of_win()
+    if team1() == teamname:
+        for item in probabilities:
+            if item % 2 == 0:
+                pOfXsWins.append((item / z) * z)
+
+    if team2() == teamname:
+        for item in probabilities:
+            if item % 2 == 1:
+                pOfXsWins.append((item / z) * z)
+
+def build_up_p_x_given_loss_list():
+    # NEED TO FILL IN THE PROBABILITY OF X OCCURING GIVEN A LOSS
+    # LIST = (P(X)*P(Y))/P(Y)
+    z = prob_of_lose()
+    if team1() == teamname:
+        for item in probabilities:
+            if item % 2 == 1:
+                pOfXsLosses.append((item * z) / z)
+
+    if team2() == teamname:
+        for item in probabilities:
+            if item % 2 == 0:
+                pOfXsLosses.append((item * z) / z)
+
+# FOR EACH X ATTR NEED TO FIND X | Y
+def training():
+    # LIST * P(Y)
+    t1_win = prob_of_win()
+    t1_lose = prob_of_lose()
+    for i in pOfXsWins:
+        probs_win.append(i * t1_win)
+    for i in pOfXsLosses:
+        probs_lose.append(i * t1_lose)
+
+# BASED OFF OF INFO FROM TRAINING WHO SHOULD WIN
+
+def run_program():
+    run_attrs()
+    run_probabilites()
+    build_up_p_x_given_win_list()
+    build_up_p_x_given_loss_list()
+    training()
+
+def classify():
+    # argmax Π of list
+
+    answer = []
+    prob_win = functools.reduce(lambda x, y: x * y if y != 0 and x != 0 else 0.001, probs_win) * prob_of_win()
+    prob_loss = functools.reduce(lambda x, y: x * y if y != 0 and x != 0 else 0.001, probs_lose) * prob_of_lose()
+
+    if team1() == teamnames[0]:
+        answer.append(prob_win)
+        answer.append(prob_loss)
+    if team2() == teamnames[0]:
+        answer.append(prob_loss)
+        answer.append(prob_win)
+
+    max_value = max(answer)
+    #print("Team", teamnames[0], " chance of winning given all variables: ", max_value)
+
+    winner_is.append(max_value)
+
+def classify2():
+    answer2 = []
+    prob_win = functools.reduce(lambda x, y: x * y if y != 0 and x != 0 else 0.001, probs_win) * prob_of_win()
+    prob_loss = functools.reduce(lambda x, y: x * y if y != 0 and x != 0 else 0.001, probs_lose) * prob_of_lose()
+
+    if team1() == teamnames[1]:
+        answer2.append(prob_win)
+        answer2.append(prob_loss)
+    if team2() == teamnames[1]:
+        answer2.append(prob_loss)
+        answer2.append(prob_win)
+    max_value2 = max(answer2)
+    #max_index2 = answer2.index(max_value2)
+    #print("Team", teamnames[1], " chance of winning given all variables: ", max_value2)
+    winner_is.append(max_value2)
+
+def refresh():
+    del stats[:]
+    del probabilities[:]
+    del q1[:]
+    del q2[:]
+    del q3[:]
+    del q4[:]
+    del firstdowns[:]
+    del passing1stdowns[:]
+    del rushing1stdowns[:]
+    del totalyards[:]
+    del yardsperplay[:]
+    del passingyards[:]
+    del yardsperpass[:]
+    del rushingyards[:]
+    del yardsperrush[:]
+    del outcome[:]
+    del turnovers[:]
+    del possession[:]
+
+def del_lists():
+    del stats[:]
+    del probabilities[:]
+
+
+if __name__ == "__main__":
+
+    # FIRST GAME
+    teamnames = []
+    teamname = 'DEN'
+    teamnames.append(teamname)
+
+    # Week 1 Game
+    grabstats(game=master.chargers_vs_broncos())
+    stats = [x.replace('\t', '').replace('\n', '') for x in stats]
+    run_program()
+    del_lists()
+
+    # WEEK 2 GAME
+    grabstats(game=master.cowboys_vs_broncos())
+    stats = [x.replace('\t', '').replace('\n', '') for x in stats]
+    run_program()
+    del_lists()
+
+    #  WEEK 3 GAME
+    grabstats(game=master.broncos_vs_bills())
+    stats = [x.replace('\t', '').replace('\n', '') for x in stats]
+    run_program()
+    classify()
+    refresh()
+
+    # TEAM 2
+    teamname = 'OAK'
+    teamnames.append(teamname)
+
+    # WEEK 1
+    grabstats(game=master.raiders_vs_titans())
+    stats = [x.replace('\t', '').replace('\n', '') for x in stats]
+    run_program()
+    del_lists()
+
+    # WEEK 2
+    grabstats(game=master.raiders_vs_jets())
+    stats = [x.replace('\t', '').replace('\n', '') for x in stats]
+    run_program()
+
+    # WEEK 3
+    grabstats(game=master.raiders_vs_redskins())
+    stats = [x.replace('\t', '').replace('\n', '') for x in stats]
+    #print(stats)
+    run_program()
+    classify2()
+    xx = max(winner_is)
+    if xx == winner_is[0]:
+        print("Winner should be: ", teamnames[0])
+    else:
+        print("Winner should be: ", teamnames[1])
+
+
