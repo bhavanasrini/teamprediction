@@ -1,0 +1,104 @@
+# WEEK 1
+
+def raiders_vs_jets():
+    return "http://www.espn.com/nfl/matchup?gameId=400951669"
+def steelers_vs_browns():
+    return "http://www.espn.com/nfl/matchup?gameId=400951574"
+def raiders_vs_titans():
+    return "http://www.espn.com/nfl/matchup?gameId=400951584"
+def chiefs_vs_patriots():
+    return "http://www.espn.com/nfl/matchup?gameId=400951566"
+def falcons_vs_bears():
+    return "http://www.espn.com/nfl/matchup?gameId=400951570"
+def eagles_vs_redskins():
+    return "http://www.espn.com/nfl/matchup?gameId=400951592"
+def jets_vs_bills():
+    return "http://www.espn.com/nfl/matchup?gameId=400951567"
+def jaguars_vs_texans():
+    return "http://www.espn.com/nfl/matchup?gameId=400951580"
+def cardinals_vs_lions():
+    return "http://www.espn.com/nfl/matchup?gameId=400951576"
+def ravens_vs_bengals():
+    return "http://www.espn.com/nfl/matchup?gameId=400951572"
+def colts_vs_rams():
+    return "http://www.espn.com/nfl/matchup?gameId=400951597"
+def panthers_vs_49ers():
+    return "http://www.espn.com/nfl/matchup?gameId=400951605"
+def seahawks_vs_packers():
+    return "http://www.espn.com/nfl/matchup?gameId=400951601"
+def giants_vs_cowboys():
+    return "http://www.espn.com/nfl/matchup?gameId=400951608"
+def saints_vs_vikings():
+    return "http://www.espn.com/nfl/matchup?gameId=400951612"
+def chargers_vs_broncos():
+    return "http://www.espn.com/nfl/matchup?gameId=400951615"
+
+# WEEK 2
+def texans_vs_bengals():
+    return "http://www.espn.com/nfl/matchup?gameId=400951620"
+def bears_vs_buccaneers():
+    return "http://www.espn.com/nfl/matchup?gameId=400951645"
+def cardinals_vs_colts():
+    return "http://www.espn.com/nfl/matchup?gameId=400951632"
+def bills_vs_panthers():
+    return "http://www.espn.com/nfl/matchup?gameId=400951630"
+def browns_vs_ravens():
+    return "http://www.espn.com/nfl/matchup?gameId=400951626"
+def viking_vs_steelers():
+    return "http://www.espn.com/nfl/matchup?gameId=400951643"
+def patriots_vs_saints():
+    return "http://www.espn.com/nfl/matchup?gameId=400951639"
+def eagles_vs_chiefs():
+    return "http://www.espn.com/nfl/matchup?gameId=400951636"
+def titans_vs_jaguars():
+    return "http://www.espn.com/nfl/matchup?gameId=400951635"
+def dolphins_vs_chargers():
+    return "http://www.espn.com/nfl/matchup?gameId=400951666"
+def jets_vs_raiders():
+    return "http://www.espn.com/nfl/matchup?gameId=400951669"
+def cowboys_vs_broncos():
+    return "http://www.espn.com/nfl/matchup?gameId=400951673"
+def ers49_vs_seahawks():
+    return "http://www.espn.com/nfl/matchup?gameId=400951676"
+def redskins_vs_rams():
+    return "http://www.espn.com/nfl/matchup?gameId=400951674"
+def packers_vs_falcons():
+    return "http://www.espn.com/nfl/matchup?gameId=400951679"
+def lions_vs_giants():
+    return "http://www.espn.com/nfl/matchup?gameId=400951681"
+# WEEK 3
+def broncos_vs_bills():
+    return "http://www.espn.com/nfl/matchup?gameId=400951583"
+def rams_vs_fourty9ers():
+    return "http://www.espn.com/nfl/matchup?gameId=400951568"
+def ravens_vs_jaguars():
+    return "http://www.espn.com/nfl/matchup?gameId=400951579"
+def falcons_vs_lions():
+    return "http://www.espn.com/nfl/matchup?gameId=400951594"
+def browns_vs_colts():
+    return "http://www.espn.com/nfl/matchup?gameId=400951599"
+def steelers_vs_bears():
+    return "http://www.espn.com/nfl/matchup?gameId=400951590"
+def saints_vs_panthers():
+    return "http://www.espn.com/nfl/matchup?gameId=400951587"
+def giants_vs_eagles():
+    return "http://www.espn.com/nfl/matchup?gameId=400951616"
+def dolphins_vs_jets():
+    return "http://www.espn.com/nfl/matchup?gameId=400951611"
+def texans_vs_patriots():
+    return "http://www.espn.com/nfl/matchup?gameId=400951607"
+def bucceneers_vs_vikings():
+    return "http://www.espn.com/nfl/matchup?gameId=400951604"
+def seahawks_vs_titans():
+    return "http://www.espn.com/nfl/matchup?gameId=400951623"
+def bengals_vs_packers():
+    return "http://www.espn.com/nfl/matchup?gameId=400951627"
+def raiders_vs_redskins():
+    return 'http://www.espn.com/nfl/matchup?gameId=400951644'
+def chiefs_vs_chargers():
+    return "http://www.espn.com/nfl/matchup?gameId=400951634"
+def cowboys_vs_cardinals():
+    return "http://www.espn.com/nfl/matchup?gameId=400951668"
+
+
+# WEEK 4
