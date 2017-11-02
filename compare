@@ -1,0 +1,49 @@
+#import main
+import csv
+import numpy as np
+
+team1 = "Broncos"
+team2 = "Chiefs"
+
+likelytowin = []
+likelytolose = []
+
+np.set_printoptions(suppress=True)
+
+def whoslikelytowin(file):
+    with open(file, 'r') as csvfile:
+        next(csvfile)
+        read = csv.reader(csvfile, delimiter=' ', quotechar=',')
+        for row in read:
+            # print(row[-1])
+            for word in row:
+                word = word.split(",")
+
+        likelytowin.append(word[-2])
+        likelytolose.append(word[-1])
+        #print(likelytowin, likelytolose)
+        #print("Probability of ", file[0:3]," lose: ", word[-1])
+        #print("Probability of ", file[0:3]," win: ", word[-2])
+def winneris():
+    to_win = np.array(likelytowin, dtype=np.float64)
+    to_lose = np.array(likelytolose, dtype=np.float64)
+    if to_win[0] == to_win[1]:
+        if max(to_lose) == to_lose[0]:
+            winner = team2
+            print("Winner", winner)
+        else:
+            print("Winner ", team1)
+
+    elif max(to_win) == to_win[0]:
+        winner = team1
+        print("Winner", winner)
+    elif max(to_win) == to_win[1]:
+        winner = team2
+        print("Winner", winner)
+    print(max(to_win))
+
+# TEAM 1
+whoslikelytowin('DENdata.csv')
+# TEAM 2
+whoslikelytowin('KCdata.csv')
+winneris()
